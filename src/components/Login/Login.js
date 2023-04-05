@@ -32,7 +32,6 @@ const passwordReducer = (state, action) => {
   return { value: "", isValid: false };
 };
 
-
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
@@ -42,67 +41,52 @@ const Login = (props) => {
 
   //const [enteredPassword, setEnteredPassword] = useState("");
   //const [passwordIsValid, setPasswordIsValid] = useState();
-  
+
   const [formIsValid, setFormIsValid] = useState(false);
 
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
     isValid: null,
   });
-  const [collegeNameState, dispatchCollegeName] = useReducer(collegeNameReducer,{
+  const [collegeNameState, dispatchCollegeName] = useReducer(
+    collegeNameReducer,
+    {
       value: "",
       isValid: null,
     }
   );
-  const [passwordState, dispatchPassword] = useReducer(passwordReducer,{
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
     value: "",
     isValid: null,
-  }
-);
+  });
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: collegeNameIsValid } = collegeNameState;
+  const { isValid: passwordIsValid } = passwordState;
 
-  // useEffect(() => {
-  //   const identifier = setTimeout(() => {
-  //     console.log("checking form validity");
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") &&
-  //         enteredPassword.trim().length > 6 &&
-  //         enteredCollegeName.trim().length > 2
-  //     );
-  //   }, 500);
-  //   return () => {
-  //     console.log("cleanup");
-  //     clearTimeout(identifier);
-  //   };
-  // }, [enteredEmail, enteredPassword, enteredCollegeName]);
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("checking form validity");
+      setFormIsValid(emailIsValid && passwordIsValid && collegeNameIsValid);
+    }, 500);
+    return () => {
+      console.log("cleanup");
+      clearTimeout(identifier);
+    };
+  }, [emailIsValid, collegeNameIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
     //  setEnteredEmail(event.target.value);
-    setFormIsValid(
-      event.target.value.includes("@") &&
-        passwordState.isValid &&
-        collegeNameState.isValid
-    );
   };
 
   const collegeNameChangeHandler = (event) => {
-   // setEnteredCollegeName(event.target.value);
-   dispatchCollegeName({type: "USER_INPUT", val: event.target.value}); 
-   setFormIsValid(
-      event.target.value.trim().length > 2 &&
-        passwordState.isValid &&
-        emailState.isValid
-    );
+    // setEnteredCollegeName(event.target.value);
+    dispatchCollegeName({ type: "USER_INPUT", val: event.target.value });
   };
 
   const passwordChangeHandler = (event) => {
-   // setEnteredPassword(event.target.value);
-   dispatchPassword({type: "USER_INPUT" , val: event.target.value}); 
-   setFormIsValid(
-      event.target.value.trim().length > 6 &&
-        emailState.isValid &&
-        collegeNameState.isValid
-    );
+    // setEnteredPassword(event.target.value);
+    dispatchPassword({ type: "USER_INPUT", val: event.target.value });
   };
 
   const validateEmailHandler = () => {
@@ -111,18 +95,22 @@ const Login = (props) => {
   };
 
   const validateCollegeNameHandler = () => {
-   // setCollegeNameIsValid(enteredCollegeName.trim().length > 3);
-    dispatchCollegeName({type: "INPUT_BLUR"});
+    // setCollegeNameIsValid(enteredCollegeName.trim().length > 3);
+    dispatchCollegeName({ type: "INPUT_BLUR" });
   };
 
   const validatePasswordHandler = () => {
-   // setPasswordIsValid(enteredPassword.trim().length > 6);
-    dispatchPassword({type: "INPUT_BLUR"});
+    // setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: "INPUT_BLUR" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value, collegeNameState.value);
+    props.onLogin(
+      emailState.value,
+      passwordState.value,
+      collegeNameState.value
+    );
   };
 
   return (
