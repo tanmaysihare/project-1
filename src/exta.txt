@@ -1,0 +1,10 @@
+ setFormIsValid(
+      event.target.value.trim().length > 2 &&
+        enteredPassword.trim().length > 6 &&
+        enteredEmail.includes("@")
+    );
+     setFormIsValid(
+      event.target.value.trim().length > 6 &&
+        enteredEmail.includes("@") &&
+        enteredCollegeName.trim().length > 2
+    );
